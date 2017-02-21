@@ -19,4 +19,4 @@
   1. Use Mockito to verify behavior. Hint: in some cases currency conversion is not needed, so that no need to call Fixerio. You can verify that.
 1. Try running your tests both with IDE and Maven capabilities. Pay attention to how results are presented in both cases.
 1. Optional. Implement integration test. Make sure it's executed when running `mvn install`
-1. Commit all your changes to your fork. Create pull request from your form to my original repository. In comment please provide your English name.
+1. Commit all your changes to your fork. Create pull request from your fork to my original repository. In comment please provide your English name.
