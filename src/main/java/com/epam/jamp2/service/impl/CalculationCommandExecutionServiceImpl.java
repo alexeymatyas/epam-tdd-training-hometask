@@ -58,7 +58,11 @@ public class CalculationCommandExecutionServiceImpl implements CalculationComman
         }
     }
 
-    private BigDecimal getConvertedValue(Value value, Optional<String> targetCurrencyCode)
+    public void setFxRatesService(FxRatesService fxRatesService) {
+        this.fxRatesService = fxRatesService;
+    }
+
+    public BigDecimal getConvertedValue(Value value, Optional<String> targetCurrencyCode)
             throws IOException, UnknownCurrencyException {
         BigDecimal convertedValue;
         if(!value.getCurrencyCode().isPresent() || value.getCurrencyCode().equals(targetCurrencyCode)) {
