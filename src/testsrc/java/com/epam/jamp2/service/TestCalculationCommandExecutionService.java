@@ -74,8 +74,7 @@ public class TestCalculationCommandExecutionService {
                 new Value("gbp", BigDecimal.valueOf(2.0)), Operation.ADD, "gbp");
         Value resultTwo = target.calculate(hmm);
         Value expectedTwo = new Value("gbp", BigDecimal.valueOf(3.0));
-//        assertThat((resultTwo), hasProperty("value", equalTo(expectedTwo.getValue())));
-        assertThat((resultTwo), samePropertyValuesAs(expectedTwo));
+        assertThat((resultTwo), samePropertyValuesAs(expectedTwo));    // Note: could use the hasProperty method.  assertThat((resultTwo), hasProperty("value", equalTo(expectedTwo.getValue())));
 
     }
 
