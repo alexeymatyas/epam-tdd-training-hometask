@@ -48,7 +48,12 @@ public class CalculationCommandExecutionServiceTest {
         CalculationCommand cmd = mockCalculationCommand(ADD_DIFF_CCY, 686.6, 5.0, FxRateMockData.CNY);
 
         Value result = calculationCommandExecutionServiceImpl.calculate(cmd);
-        validateCalculatedValue(result, FxRateMockData.CNY, 691.6, 0.1);
+
+        Assert.assertNotNull(result);
+        Assert.assertThat(result.getCurrencyCode().get(), is(FxRateMockData.CNY));
+        Assert.assertThat(result.getValue(),
+                is(closeTo(new BigDecimal(691.6), new BigDecimal(0.1))));
+
     }
 
     @Test
@@ -59,7 +64,12 @@ public class CalculationCommandExecutionServiceTest {
 
         Value result = calculationCommandExecutionServiceImpl.calculate(cmd);
         verify(fxRatesService, never()).convert(anyString(), anyString(), any(BigDecimal.class));
-        validateCalculatedValue(result, FxRateMockData.CNY, 20.0, 0.1);
+
+        Assert.assertNotNull(result);
+        Assert.assertThat(result.getCurrencyCode().get(), is(FxRateMockData.CNY));
+        Assert.assertThat(result.getValue(),
+                is(closeTo(new BigDecimal(20.0), new BigDecimal(0.1))));
+
     }
 
     @Test
@@ -70,7 +80,12 @@ public class CalculationCommandExecutionServiceTest {
                 34.33, FxRateMockData.CNY);
 
         Value result = calculationCommandExecutionServiceImpl.calculate(cmd);
-        validateCalculatedValue(result, FxRateMockData.CNY, 134.33, 0.1);
+
+        Assert.assertNotNull(result);
+        Assert.assertThat(result.getCurrencyCode().get(), is(FxRateMockData.CNY));
+        Assert.assertThat(result.getValue(),
+                is(closeTo(new BigDecimal(134.33), new BigDecimal(0.1))));
+
     }
 
     @Test
@@ -80,7 +95,12 @@ public class CalculationCommandExecutionServiceTest {
         CalculationCommand cmd = mockCalculationCommand(MULTI_RIGHT_CCY_PROVIDED, 100.0, 5.0, FxRateMockData.USD);
 
         Value result = calculationCommandExecutionServiceImpl.calculate(cmd);
-        validateCalculatedValue(result, FxRateMockData.USD, 500.0, 0.1);
+
+        Assert.assertNotNull(result);
+        Assert.assertThat(result.getCurrencyCode().get(), is(FxRateMockData.USD));
+        Assert.assertThat(result.getValue(),
+                is(closeTo(new BigDecimal(500.0), new BigDecimal(0.1))));
+
     }
 
     @Test(expected = CommandFormatException.class)
@@ -88,15 +108,6 @@ public class CalculationCommandExecutionServiceTest {
             throws CommandFormatException, IOException, UnknownCurrencyException {
         CalculationCommand cmd = mockCalculationCommand(INCORRECT_CMD_FORMAT, 1.0, 2.9, FxRateMockData.CNY);
         calculationCommandExecutionServiceImpl.calculate(cmd);
-    }
-
-    private void validateCalculatedValue(Value result, String expectedCcy, double expectedValue,
-                                         double acceptableDiff) {
-        Assert.assertNotNull(result);
-        Assert.assertThat(result.getCurrencyCode().get(), is(expectedCcy));
-        Assert.assertThat(result.getValue(),
-                is(closeTo(new BigDecimal(expectedValue), new BigDecimal(acceptableDiff))));
-
     }
 
     private CalculationCommand mockCalculationCommand(String calFormula, double

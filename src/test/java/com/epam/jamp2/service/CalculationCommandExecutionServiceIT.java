@@ -34,7 +34,12 @@ public class CalculationCommandExecutionServiceIT {
     public void testCalcWithDiffCcy() throws CommandFormatException, IOException {
         CalculationCommand cmd = CalculationCommand.parseFromString(ADD_DIDD_CCY);
         Value result = calculationCommandExecutionService.calculate(cmd);
-        validateCalculatedValue(result, FxRateMockData.CNY, 691.6, 5.0);
+
+        Assert.assertNotNull(result);
+        Assert.assertThat(result.getCurrencyCode().get(), is(FxRateMockData.CNY));
+        Assert.assertThat(result.getValue(),
+                is(closeTo(new BigDecimal(691.6), new BigDecimal(5.0))));
+
     }
 
     @Test
@@ -44,7 +49,11 @@ public class CalculationCommandExecutionServiceIT {
         CalculationCommand cmd = CalculationCommand.parseFromString(DIVIDE_SAME_CCY);
 
         Value result = calculationCommandExecutionService.calculate(cmd);
-        validateCalculatedValue(result, FxRateMockData.CNY, 20.0, 0.1);
+
+        Assert.assertNotNull(result);
+        Assert.assertThat(result.getCurrencyCode().get(), is(FxRateMockData.CNY));
+        Assert.assertThat(result.getValue(),
+                is(closeTo(new BigDecimal(20.0), new BigDecimal(0.1))));
     }
 
     @Test
@@ -54,15 +63,12 @@ public class CalculationCommandExecutionServiceIT {
         CalculationCommand cmd = CalculationCommand.parseFromString(MULTI_RIGHT_CCY_PROVIDED);
 
         Value result = calculationCommandExecutionService.calculate(cmd);
-        validateCalculatedValue(result, FxRateMockData.USD, 500.0, 0.1);
-    }
 
-    private void validateCalculatedValue(Value result, String expectedCcy, double expectedValue,
-                                         double acceptableDiff) {
         Assert.assertNotNull(result);
-        Assert.assertThat(result.getCurrencyCode().get(), is(expectedCcy));
+        Assert.assertThat(result.getCurrencyCode().get(), is(FxRateMockData.USD));
         Assert.assertThat(result.getValue(),
-                is(closeTo(new BigDecimal(expectedValue), new BigDecimal(acceptableDiff))));
+                is(closeTo(new BigDecimal(500.0), new BigDecimal(0.1))));
 
     }
+
 }
