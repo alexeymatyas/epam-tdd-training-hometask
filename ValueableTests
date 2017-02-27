@@ -1,0 +1,23 @@
+unit test:
+    1. parser test:
+        - expected string:
+            - with operator +, -, *, /
+            - with different ccy: CNY USD CFH
+            - with decimal, no decimal, 0, and extreme large values
+        - unexpected string, throw exception:
+            - missing one of first value, operator, second value, equal symbol
+            - incorrect ccy, like CN
+            - incorrect value, like 10.0k
+    2. calculator test:
+        - expected results:
+            - with operator +, -, *, /
+            - with ccy converted correctly for first input ccy to output ccy
+            - with ccy converted correctly for second input ccy to output ccy
+            - with same ccy of input and output, no need to call proxy
+        - exception case:
+            - with second input value 0 and operator /
+integration test:
+    1. inputs and output with same ccy, 4 kinds of operation(+-*/), CNY CNY = CNY
+    2. inputs with same ccy, output with another ccy, 4 kinds of operation(+-*/), USD USD = CNY
+    3. one input and output with same ccy, the other input with another ccy, 4 kinds of operation(+-*/), CNY CFH = CFH / CFH CNY = CFH
+    4. inputs and output with different ccy, 4 kinds of operation(+-*/), CNY CFH = USD
