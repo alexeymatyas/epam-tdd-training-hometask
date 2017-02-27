@@ -38,7 +38,7 @@ public class CalculationCommandExecutionServiceImplTest {
   private CalculationCommandExecutionService mockedCalculationService = new CalculationCommandExecutionServiceImpl();
 
   @BeforeClass
-  public static void setup(){
+  public static void setup() {
     calculationService = new CalculationCommandExecutionServiceImpl();
   }
 
@@ -65,15 +65,15 @@ public class CalculationCommandExecutionServiceImplTest {
   }
 
   @Test(expected = CommandFormatException.class)
-  public void shouldThrowFormatExceptionWhenWrongExpression() throws CommandFormatException{
+  public void shouldThrowFormatExceptionWhenWrongExpression() throws CommandFormatException {
     CalculationCommand.parseFromString("dummy1+dummy2=dummy");
   }
 
   @Test(expected = RuntimeException.class)
-  public void should_throw_runtime_exception_when_rate_service_ioexception() throws IOException,UnknownCurrencyException{
+  public void should_throw_runtime_exception_when_rate_service_ioexception() throws IOException, UnknownCurrencyException {
     try {
       CalculationCommand command = CalculationCommand.parseFromString("abc54.13+usd25.96=usd");
-      doThrow(IOException.class).when(mockedFXRatesService).convert(anyString(),anyString(),any(BigDecimal.class));
+      doThrow(IOException.class).when(mockedFXRatesService).convert(anyString(), anyString(), any(BigDecimal.class));
 
       Value result = mockedCalculationService.calculate(command);
       Assert.assertEquals("Currency is not correct.", Optional.of("usd"), result.getCurrencyCode());
@@ -89,7 +89,7 @@ public class CalculationCommandExecutionServiceImplTest {
     CalculationCommand command = CalculationCommand.parseFromString("ddd54.13+ddd25.96=ddd");
     Value result = mockedCalculationService.calculate(command);
 
-    verify(mockedFXRatesService, times(0)).convert(anyString(),anyString(),any(BigDecimal.class));
+    verify(mockedFXRatesService, times(0)).convert(anyString(), anyString(), any(BigDecimal.class));
   }
 
 }
