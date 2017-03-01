@@ -22,9 +22,8 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Optional;
 
-import static org.hamcrest.beans.SamePropertyValuesAs.samePropertyValuesAs;
+import static org.hamcrest.beans.HasPropertyWithValue.hasProperty;
 import static org.hamcrest.number.BigDecimalCloseTo.closeTo;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -58,10 +57,24 @@ public class ITCalculationCommandExecutionService {
 
         return Arrays.asList(new Object[][]{
                 {new Value("gbp", BigDecimal.valueOf(1.0)), new Value("gbp", BigDecimal.valueOf(2.0))
-                        , Operation.ADD, "gbp", new Value("gbp", BigDecimal.valueOf(3.0))}
-                                        ,
+                        , Operation.ADD, "gbp", new Value("gbp", BigDecimal.valueOf(3.0))},
+                {new Value("gbp", BigDecimal.valueOf(3.0)), new Value("gbp", BigDecimal.valueOf(2.0))
+                        , Operation.SUBTRACT, "gbp", new Value("gbp", BigDecimal.valueOf(1.0))},
                 {new Value("gbp", BigDecimal.valueOf(1.0)), new Value("cny", BigDecimal.valueOf(2.0))
-                        , Operation.ADD, "cny", new Value("cny", BigDecimal.valueOf(12.0))}
+                        , Operation.ADD, "cny", new Value("cny", BigDecimal.valueOf(12.0))},
+                {new Value("gbp", BigDecimal.valueOf(10000000000000000001.0)),
+                        new Value("cny", BigDecimal.valueOf(20000000000000000000.0))
+                        , Operation.ADD, "cny", new Value("cny", BigDecimal.valueOf(120000000000000000000.0))},
+                {new Value("gbp", BigDecimal.valueOf(0.00001)), new Value("gbp", BigDecimal.valueOf(0.0))
+                        , Operation.ADD, "cny", new Value("cny", BigDecimal.valueOf(0.0001))},
+                {new Value("gbp", BigDecimal.valueOf(1.0)), new Value("gbp", BigDecimal.valueOf(2.0))
+                        , Operation.ADD, null, new Value("gbp", BigDecimal.valueOf(3.0))},
+                {new Value("gbp", BigDecimal.valueOf(1.0)), new Value("cny", BigDecimal.valueOf(2.0))
+                        , Operation.ADD, null, new Value("gbp", BigDecimal.valueOf(1.2))},
+                {new Value("gbp", BigDecimal.valueOf(1.0)), new Value(null, BigDecimal.valueOf(2.0))
+                        , Operation.ADD, null, new Value("gbp", BigDecimal.valueOf(3.0))},
+                {new Value(null, BigDecimal.valueOf(1.0)), new Value(null, BigDecimal.valueOf(2.0))
+                        , Operation.ADD, "gbp", new Value("gbp", BigDecimal.valueOf(3.0))}
         });
     }
 
@@ -75,9 +88,8 @@ public class ITCalculationCommandExecutionService {
     @Test
     public void test_calculate() throws IOException, UnknownCurrencyException {
         Value result = target.calculate(command);
-//        assertThat((result), samePropertyValuesAs(expected));
-        BigDecimal tolerance = BigDecimal.valueOf(0.35);
-        assertThat(result.getValue(), closeTo(expected.getValue(), expected.getValue().multiply(tolerance)));
+        BigDecimal errorTolerance = expected.getValue().multiply(BigDecimal.valueOf(0.15)); // i.e. ±15% for currency fluctuations
+        assertThat((result), hasProperty("value", closeTo(expected.getValue(), errorTolerance)));
         assertThat(result.getCurrencyCode(), equalTo(expected.getCurrencyCode()));
     }
 

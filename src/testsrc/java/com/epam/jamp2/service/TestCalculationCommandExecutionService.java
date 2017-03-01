@@ -5,8 +5,6 @@ import com.epam.jamp2.model.Operation;
 import com.epam.jamp2.model.UnknownCurrencyException;
 import com.epam.jamp2.model.Value;
 import com.epam.jamp2.service.impl.CalculationCommandExecutionServiceImpl;
-import org.hamcrest.beans.HasProperty;
-import org.hamcrest.beans.HasPropertyWithValue;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,7 +22,6 @@ import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
 
-//TODO http://www.mkyong.com/unittest/junit-4-tutorial-6-parameterized-test/
 @RunWith(value = Parameterized.class)
 public class TestCalculationCommandExecutionService {
 
@@ -33,7 +30,6 @@ public class TestCalculationCommandExecutionService {
     private Value value;
     private Optional<String> targetCurrencyCode;
     private BigDecimal expected;
-
 
     // Parameterized data for tests
     @Parameters(name = "{index}: test getConvertedValue({0}, {1}) = {2}")
@@ -74,7 +70,8 @@ public class TestCalculationCommandExecutionService {
                 new Value("gbp", BigDecimal.valueOf(2.0)), Operation.ADD, "gbp");
         Value resultTwo = target.calculate(hmm);
         Value expectedTwo = new Value("gbp", BigDecimal.valueOf(3.0));
-        assertThat((resultTwo), samePropertyValuesAs(expectedTwo));    // Note: could use the hasProperty method.  assertThat((resultTwo), hasProperty("value", equalTo(expectedTwo.getValue())));
+        assertThat((resultTwo), samePropertyValuesAs(expectedTwo));    // Note: could use the hasProperty method.
+        assertThat((resultTwo), hasProperty("value", equalTo(expectedTwo.getValue())));
 
     }
 

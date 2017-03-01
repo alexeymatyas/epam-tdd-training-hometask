@@ -1,0 +1,38 @@
+#tests that would be valuable
+
+***CalculationCommand***
+
+- parseFromString
+When string is usd1&cny2=usd, throw CommandFormatException.
+When string is usd1.&cny2.=usd, throw CommandFormatException.
+When string is usd1.0&cny2.0=usd, return a CalculationCommand.
+When string is usd1.0&cny2.0=usd, return a CalculationCommand.
+When string is usd10000000000000000000.0&cny2.0=usd, return a CalculationCommand.
+When string is usd0.00000000000000000001&cny2.0=usd, return a CalculationCommand.
+When string is <leftCurrency>1+<rightCurrency>2=<resultCurrency>, return a CalculationCommand with leftOperand.currencyCode <leftCurrency> and leftOperand.currencyCode <rightCurrency> and resultCurrencyCode Optional.of(<resultCurrency>).
+When string is usd1+cny2=, return a CalculationCommand with resultCurrencyCode Optional.empty().
+When string is usd<leftValue>+cny<rightValue>=usd, return a CalculationCommand with leftOperand.value <leftValue> and rightOperand.value <rightValue>.
+When string is usd1<Operation>cny2=usd, return a CalculationCommand with operation <Operation>.
+
+***CalculationCommandExecutionServiceImpl***
+
+- getConvertedValue
+When value {value:1.0, currencyCode:gbp} and targetCurrencyCode "cny" and fxRatesService oneGBPToTenCNYMock, return 10.0
+When value {value:10000000000000000001.0, currencyCode:gbp} and targetCurrencyCode "cny" and fxRatesService oneGBPToTenCNYMock, return 100000000000000000010
+When value {value:0.00001, currencyCode:gbp} and targetCurrencyCode "cny" and fxRatesService oneGBPToTenCNYMock, return 0.0001
+When value {value:1.0, currencyCode:gbp} and targetCurrencyCode "gbp" and fxRatesService null, return 1.0
+When value {value:1.0, currencyCode:zzz} and targetCurrencyCode "cny" and fxRatesService oneGBPToTenCNYMock, throw UnknownCurrencyException.
+When value {value:1.0, currencyCode:null} and targetCurrencyCode "cny" and fxRatesService oneGBPToTenCNYMock, return 1.0
+When value {value:Optional.empty(), currencyCode:gbp} and targetCurrencyCode "cny" and fxRatesService oneGBPToTenCNYMock, throw a java.lang.NullPointerException exception.
+
+- calculate
+
+command: (GBP1.0, GBP2.0, ADD, gbp) should return GBP3.0
+command: (GBP3.0, GBP2.0, SUBTRACT, gbp) should return GBP1.0
+command: (GBP1.0, CNY2.0, ADD, cny) should return CNY12.0
+command: (GBP10000000000000000001.0, CNY20000000000000000000.0, ADD, cny) should return CNY120000000000000000000.0
+command: (GBP0.000010, GBP0.0, ADD, cny) should return CNY0.00010
+command: (GBP1.0, GBP2.0, ADD, null) should return GBP3.0
+command: (GBP1.0, CNY2.0, ADD, null) should return GBP1.2
+command: (GBP1.0, 2.0, ADD, null) should return GBP3.0
+command: (1.0, 2.0, ADD, gbp) should return GBP3.0
