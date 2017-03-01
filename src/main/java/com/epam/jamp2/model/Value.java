@@ -30,4 +30,8 @@ public class Value {
     public void setValue(BigDecimal value) {
         this.value = value;
     }
+
+    public String toString() {
+        return "" + this.getCurrencyCode().orElse("").toUpperCase() + this.getValue();
+    }
 }

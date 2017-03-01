@@ -7,6 +7,7 @@ import com.epam.jamp2.model.Value;
 import com.epam.jamp2.rest.FixerioServiceProxyConfiguration;
 import com.epam.jamp2.service.impl.CalculationCommandExecutionServiceImpl;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -24,7 +25,9 @@ import java.util.Collection;
 import java.util.Optional;
 
 import static org.hamcrest.beans.SamePropertyValuesAs.samePropertyValuesAs;
+import static org.hamcrest.number.BigDecimalCloseTo.closeTo;
 import static org.junit.Assert.assertThat;
+import static org.hamcrest.core.IsEqual.equalTo;
 
 @RunWith(Parameterized.class)
 //@RunWith(SpringJUnit4ClassRunner.class)
@@ -33,10 +36,13 @@ import static org.junit.Assert.assertThat;
 public class ITCalculationCommandExecutionService {
 
     // Performs the same job as @RunWith(SpringJUnit4ClassRunner.class)
-    private TestContextManager testContextManager;
+    private static TestContextManager testContextManager;
+    @BeforeClass
+    public static void setUpStringContext() throws Exception {
+        testContextManager = new TestContextManager(ITCalculationCommandExecutionService.class);
+    }
     @Before
-    public void setUpStringContext() throws Exception {
-        testContextManager = new TestContextManager(getClass());
+    public void setUpStringContextt() throws Exception {
         testContextManager.prepareTestInstance(this);
     }
 
@@ -47,7 +53,7 @@ public class ITCalculationCommandExecutionService {
     private Value expected;
 
     // Parameterized data for tests
-    @Parameters(name = "{index}: test calculate({0}, {1}) = {2}")
+    @Parameters(name = "{index}: test calculate (command: {0}, {1}, {2}, {3}) should return = {4}")
     public static Collection<Object[]> data() {
 
         return Arrays.asList(new Object[][]{
@@ -55,7 +61,7 @@ public class ITCalculationCommandExecutionService {
                         , Operation.ADD, "gbp", new Value("gbp", BigDecimal.valueOf(3.0))}
                                         ,
                 {new Value("gbp", BigDecimal.valueOf(1.0)), new Value("cny", BigDecimal.valueOf(2.0))
-                        , Operation.ADD, "cny", new Value("cny", BigDecimal.valueOf(30.0))}
+                        , Operation.ADD, "cny", new Value("cny", BigDecimal.valueOf(12.0))}
         });
     }
 
@@ -66,14 +72,13 @@ public class ITCalculationCommandExecutionService {
         this.expected = expected;
     }
 
-    // constructor
-//    public ITCalculationCommandExecutionService() {
-//    }
-
     @Test
     public void test_calculate() throws IOException, UnknownCurrencyException {
         Value result = target.calculate(command);
-        assertThat((result), samePropertyValuesAs(expected));
+//        assertThat((result), samePropertyValuesAs(expected));
+        BigDecimal tolerance = BigDecimal.valueOf(0.35);
+        assertThat(result.getValue(), closeTo(expected.getValue(), expected.getValue().multiply(tolerance)));
+        assertThat(result.getCurrencyCode(), equalTo(expected.getCurrencyCode()));
     }
 
 }
