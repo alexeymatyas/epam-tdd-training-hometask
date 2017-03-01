@@ -20,13 +20,3 @@
 1. Try running your tests both with IDE and Maven capabilities. Pay attention to how results are presented in both cases.
 1. Optional. Implement integration test. Make sure it's executed when running `mvn install`
 1. Commit all your changes to your fork. Create pull request from your fork to my original repository. In comment please provide your English name.
-
-
-
-
-
-
-
-
-
-
