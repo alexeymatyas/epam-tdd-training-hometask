@@ -27,7 +27,6 @@ import static org.junit.Assert.assertThat;
 
 @RunWith(Parameterized.class)
 //@RunWith(SpringJUnit4ClassRunner.class)
-@SuppressWarnings("InstanceMethodNamingConvention")
 @ContextConfiguration(classes = {TestConfig.class, FixerioServiceProxyConfiguration.class })
 public class ITCalculationCommandExecutionService {
 
