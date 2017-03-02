@@ -1,16 +1,17 @@
 package com.epam.jamp2.service.impl;
 
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.epam.jamp2.model.CalculationCommand;
 import com.epam.jamp2.model.UnknownCurrencyException;
 import com.epam.jamp2.model.Value;
 import com.epam.jamp2.service.CalculationCommandExecutionService;
 import com.epam.jamp2.service.FxRatesService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.Optional;
 
 /**
  * Created by Alexey on 06.12.2016.
@@ -61,7 +62,7 @@ public class CalculationCommandExecutionServiceImpl implements CalculationComman
     private BigDecimal getConvertedValue(Value value, Optional<String> targetCurrencyCode)
             throws IOException, UnknownCurrencyException {
         BigDecimal convertedValue;
-        if(!value.getCurrencyCode().isPresent() || value.getCurrencyCode().equals(targetCurrencyCode)) {
+        if(!value.getCurrencyCode().isPresent() || value.getCurrencyCode().get().equalsIgnoreCase(targetCurrencyCode.get())) {
             convertedValue = value.getValue();
         } else {
             convertedValue = fxRatesService.convert(value.getCurrencyCode().get(), targetCurrencyCode.get(),
