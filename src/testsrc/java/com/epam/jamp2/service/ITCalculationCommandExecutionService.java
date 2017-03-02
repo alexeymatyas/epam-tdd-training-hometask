@@ -50,7 +50,7 @@ public class ITCalculationCommandExecutionService {
     // Parameterized data for integration tests
     @Parameters(name = "{index}: test calculate (command: {0}, {1}, {2}, {3}) should return = {4}")
     public static Collection<Object[]> data() {
-        return TestCalculationCommandExecutionService.data();
+        return CalculationCommandExecutionServiceTest.data();
     }
 
     // constructor

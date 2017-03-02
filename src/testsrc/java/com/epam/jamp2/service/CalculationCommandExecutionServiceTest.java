@@ -25,7 +25,7 @@ import static org.mockito.Mockito.when;
 
 
 @RunWith(value = Parameterized.class)
-public class TestCalculationCommandExecutionService {
+public class CalculationCommandExecutionServiceTest {
 
     private CalculationCommandExecutionServiceImpl target;
 
@@ -61,7 +61,7 @@ public class TestCalculationCommandExecutionService {
     }
 
     // constructor
-    public TestCalculationCommandExecutionService(Value leftOperand, Value rightOperand, Operation operation
+    public CalculationCommandExecutionServiceTest(Value leftOperand, Value rightOperand, Operation operation
             , String resultCurrencyCode, Value expected) {
         this.command = new CalculationCommand(leftOperand, rightOperand, operation, resultCurrencyCode);
         this.expected = expected;

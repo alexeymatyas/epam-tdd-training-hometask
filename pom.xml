@@ -64,9 +64,6 @@
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <configuration>
                     <skip>${it.skip}</skip>
-					<includes>
-						<include>**/IT*.java</include>
-					</includes>
                 </configuration>
             </plugin>
             <plugin>
