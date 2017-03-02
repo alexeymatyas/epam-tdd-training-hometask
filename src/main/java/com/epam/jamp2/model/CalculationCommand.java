@@ -25,7 +25,7 @@ public class CalculationCommand {
 
     static {
         commandPattern = Pattern.compile("(?<"+MATCHER_GROUP_LO_CCY+">[a-zA-Z]{3})?(?<"+MATCHER_GROUP_LO_VAL+">.*?)" +
-                "(?<"+MATCHER_GROUP_OPERATION+">[+|-|\\*|/]{1})" +
+                "(?<"+MATCHER_GROUP_OPERATION+">[+|\\-|\\*|/]{1})" +
                 "((?<"+MATCHER_GROUP_RO_CCY+">[a-zA-Z]{3})?)(?<"+MATCHER_GROUP_RO_VAL+">.*?)" +
                 "=((?<"+MATCHER_GROUP_RESULT_CCY+">[a-zA-Z]{3}))?");
     }
@@ -40,11 +40,11 @@ public class CalculationCommand {
     public static CalculationCommand parseFromString(String string) throws CommandFormatException {
         Matcher m = commandPattern.matcher(string);
         if(m.matches()) {
-            Value leftOperand = new Value(m.group(MATCHER_GROUP_LO_CCY), new BigDecimal(m.group(MATCHER_GROUP_LO_VAL)));
-            Value rightOperand = new Value(m.group(MATCHER_GROUP_RO_CCY), new BigDecimal(m.group(MATCHER_GROUP_RO_VAL)));
+            Value leftOperand = new Value(m.group(MATCHER_GROUP_LO_CCY).toUpperCase(), new BigDecimal(m.group(MATCHER_GROUP_LO_VAL)));
+            Value rightOperand = new Value(m.group(MATCHER_GROUP_RO_CCY).toUpperCase(), new BigDecimal(m.group(MATCHER_GROUP_RO_VAL)));
             return new CalculationCommand(leftOperand, rightOperand,
                     Operation.fromChar(m.group(MATCHER_GROUP_OPERATION)),
-                    m.group(MATCHER_GROUP_RESULT_CCY));
+                    m.group(MATCHER_GROUP_RESULT_CCY).toUpperCase());
         } else {
             throw new CommandFormatException();
         }
