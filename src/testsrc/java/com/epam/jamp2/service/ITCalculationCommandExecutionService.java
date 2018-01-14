@@ -2,7 +2,6 @@ package com.epam.jamp2.service;
 
 import com.epam.jamp2.model.CalculationCommand;
 import com.epam.jamp2.model.Operation;
-import com.epam.jamp2.model.UnknownCurrencyException;
 import com.epam.jamp2.model.Value;
 import com.epam.jamp2.rest.FixerioServiceProxyConfiguration;
 import com.epam.jamp2.service.impl.CalculationCommandExecutionServiceImpl;
@@ -16,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestContextManager;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Collection;
 
@@ -33,36 +31,43 @@ public class ITCalculationCommandExecutionService {
     // Performs the same job as @RunWith(SpringJUnit4ClassRunner.class)
     private static TestContextManager testContextManager;
     @BeforeClass
-    public static void setUpStringContext() throws Exception {
+    public static void setUpStringContext()
+    {
         testContextManager = new TestContextManager(ITCalculationCommandExecutionService.class);
     }
     @Before
-    public void injectDependencies() throws Exception {
+    public void injectDependencies() throws Exception
+    {
         testContextManager.prepareTestInstance(this);
     }
 
     @Autowired
     private CalculationCommandExecutionServiceImpl target;
 
-    private CalculationCommand command;
+    private CalculationCommand parameter;
     private Value expected;
 
-    // Parameterized data for integration tests
-    @Parameters(name = "{index}: test calculate (command: {0}, {1}, {2}, {3}) should return = {4}")
-    public static Collection<Object[]> data() {
-        return CalculationCommandExecutionServiceTest.data();
-    }
-
-    // constructor
-    public ITCalculationCommandExecutionService(Value leftOperand, Value rightOperand, Operation operation
-                , String resultCurrencyCode, Value expected) {
-        this.command = new CalculationCommand(leftOperand, rightOperand, operation, resultCurrencyCode);
+    public ITCalculationCommandExecutionService(
+            Value leftOperand,
+            Value rightOperand,
+            Operation operation,
+            String resultCurrencyCode,
+            Value expected)
+    {
+        this.parameter = new CalculationCommand(leftOperand, rightOperand, operation, resultCurrencyCode);
         this.expected = expected;
     }
 
+    @Parameters(name = "{index}: test calculate (parameter: {0}, {1}, {2}, {3}) should return = {4}")
+    public static Collection<Object[]> data()
+    {
+        return CalculationCommandExecutionServiceScenario.data();
+    }
+
     @Test
-    public void test_calculate() throws IOException, UnknownCurrencyException {
-        Value result = target.calculate(command);
+    public void test_calculate()
+    {
+        Value result = target.calculate(parameter);
         BigDecimal errorTolerance = expected.getValue().multiply(BigDecimal.valueOf(0.20)); // i.e. ±15% for currency fluctuations
         assertThat((result), hasProperty("value", closeTo(expected.getValue(), errorTolerance)));
         assertThat(result.getCurrencyCode(), equalTo(expected.getCurrencyCode()));
