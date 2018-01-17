@@ -13,7 +13,7 @@ import java.util.Collection;
 public class CalculationCommandExecutionServiceImplScenario {
 
     public static Collection<Object[]> data() {
-        Object[][] objects = {
+        Object[][] scenarios = {
                 test("gbp", 1.0, Operation.ADD, "gbp", 2.0, "gbp",  new Value("gbp", dec(3.0))),
                 test("gbp", 3.0, Operation.SUBTRACT, "gbp", 2.0, "gbp", new Value("gbp",  dec(1.0))),
                 test("gbp", 1.0, Operation.ADD, "cny", 2.0, "cny", new Value("cny",  dec(12.0))),
@@ -25,7 +25,7 @@ public class CalculationCommandExecutionServiceImplScenario {
                 test("gbp", 1.0, Operation.ADD, null, 2.0, null, new Value("gbp",  dec(3.0))),
                 test(null, 1.0, Operation.ADD, null, 2.0, "gbp", new Value("gbp",  dec(3.0)))
         };
-        return Arrays.asList(objects);
+        return Arrays.asList(scenarios);
     }
 
     private static Object[] test(
@@ -41,7 +41,7 @@ public class CalculationCommandExecutionServiceImplScenario {
         return new Object[]{left, right, operation, resultCurrencyCode, expected};
     }
 
-    public static BigDecimal dec(Double dec)
+    static BigDecimal dec(Double dec)
     {
         return new BigDecimal(dec);
     }

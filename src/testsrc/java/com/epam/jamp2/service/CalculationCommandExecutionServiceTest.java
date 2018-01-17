@@ -62,8 +62,7 @@ public class CalculationCommandExecutionServiceTest {
     @Parameters(name = "{index}: test calculate (parameter: {0}, {1}, {2}, {3}) should return = {4}")
     public static Collection<Object[]> data()
     {
-        Collection<Object[]> data = CalculationCommandExecutionServiceImplScenario.data();
-        return data;
+        return CalculationCommandExecutionServiceImplScenario.data();
     }
 
     @Before

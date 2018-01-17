@@ -9,13 +9,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
-import java.io.IOException;
-import java.util.Optional;
-
 @SpringBootApplication
 public class FxcalcApplication {
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) {
 
 		ConfigurableApplicationContext ctx = SpringApplication.run(FxcalcApplication.class, args);
 		CalculationCommandExecutionServiceImpl service = (CalculationCommandExecutionServiceImpl) ctx.getBean(CalculationCommandExecutionService.class);
