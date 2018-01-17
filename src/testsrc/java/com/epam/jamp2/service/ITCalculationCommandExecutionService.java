@@ -24,22 +24,11 @@ import static org.hamcrest.number.BigDecimalCloseTo.closeTo;
 import static org.junit.Assert.assertThat;
 
 @RunWith(Parameterized.class)
-//@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {TestConfig.class, FixerioServiceProxyConfiguration.class })
 public class ITCalculationCommandExecutionService {
 
     // Performs the same job as @RunWith(SpringJUnit4ClassRunner.class)
     private static TestContextManager testContextManager;
-    @BeforeClass
-    public static void setUpStringContext()
-    {
-        testContextManager = new TestContextManager(ITCalculationCommandExecutionService.class);
-    }
-    @Before
-    public void injectDependencies() throws Exception
-    {
-        testContextManager.prepareTestInstance(this);
-    }
 
     @Autowired
     private CalculationCommandExecutionServiceImpl target;
@@ -58,10 +47,22 @@ public class ITCalculationCommandExecutionService {
         this.expected = expected;
     }
 
-    @Parameters(name = "{index}: test calculate (parameter: {0}, {1}, {2}, {3}) should return = {4}")
+    @Parameters(name = "{index}: integration test on calculate (parameter: {0}, {1}, {2}, {3}) should return = {4}")
     public static Collection<Object[]> data()
     {
-        return CalculationCommandExecutionServiceScenario.data();
+        return CalculationCommandExecutionServiceImplScenario.data();
+    }
+
+    @BeforeClass
+    public static void setUpSpringContext()
+    {
+        testContextManager = new TestContextManager(ITCalculationCommandExecutionService.class);
+    }
+
+    @Before
+    public void injectDependencies() throws Exception
+    {
+        testContextManager.prepareTestInstance(this);
     }
 
     @Test

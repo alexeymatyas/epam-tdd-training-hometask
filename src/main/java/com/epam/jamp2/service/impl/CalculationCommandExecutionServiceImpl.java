@@ -18,10 +18,11 @@ import java.util.Optional;
 @Service
 public class CalculationCommandExecutionServiceImpl implements CalculationCommandExecutionService {
     @Autowired
-    FxRatesService fxRatesService;
+    private FxRatesService fxRatesService;
 
     @Override
-    public Value calculate(CalculationCommand command) {
+    public Value calculate(CalculationCommand command)
+    {
         Optional<String> resultCurrencyCode = command.getResultCurrencyCode();
         if(!resultCurrencyCode.isPresent()) {
             if (command.getLeftOperand().getCurrencyCode().isPresent()) {
@@ -58,12 +59,14 @@ public class CalculationCommandExecutionServiceImpl implements CalculationComman
         }
     }
 
-    public void setFxRatesService(FxRatesService fxRatesService) {
+    public void setFxRatesService(FxRatesService fxRatesService)
+    {
         this.fxRatesService = fxRatesService;
     }
 
-    public BigDecimal getConvertedValue(Value value, Optional<String> targetCurrencyCode)
-            throws IOException, UnknownCurrencyException {
+    private BigDecimal getConvertedValue(Value value, Optional<String> targetCurrencyCode)
+            throws IOException, UnknownCurrencyException
+    {
         BigDecimal convertedValue;
         if(!value.getCurrencyCode().isPresent() || value.getCurrencyCode().equals(targetCurrencyCode)) {
             convertedValue = value.getValue();
