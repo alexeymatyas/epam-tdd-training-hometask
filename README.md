@@ -1,3 +1,9 @@
+To run:
+1. mvn install
+2. java -jar target/fxcalc-0.0.1-SNAPSHOT.jar usd100.0+cny5.0=cny
+
+
+
 # Application description
 - Application allows to calculate value of expressions given in form `<ccy1><amt1><OPERARION+-*/><ccy2><amt2> = <rslt ccy>` (e.g. usd100.0+cny5.0=cfh). 
 - Application can parse expressions from Strings.
